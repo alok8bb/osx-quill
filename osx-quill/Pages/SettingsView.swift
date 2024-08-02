@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @State private var selected: QuoteList = QuoteList.Motivation
+    @State private var quoteList: QuoteList = QuoteList.Motivation
     @State private var frequency: Frequency = Frequency.every10Seconds
     @EnvironmentObject var appState:AppState
 
     var body: some View {
         VStack() {
-            Picker(selection: $selected, label: Text("Quote List")) {
+            Picker(selection: $quoteList, label: Text("Quote List")) {
                 Text(QuoteList.Motivation.rawValue).tag(QuoteList.Motivation)
                 Text(QuoteList.Coding.rawValue).tag(QuoteList.Coding)
                 Text(QuoteList.Japanese.rawValue).tag(QuoteList.Japanese)
@@ -28,7 +28,9 @@ struct SettingsView: View {
             }
         }.padding().frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top).onChange(of: frequency) {
             appState.settingsManager.updateFrequency(frequency: frequency)
-            print(frequency)
+            appState.quoteManager.setupTimer()
+        }.onChange(of: quoteList){
+            appState.settingsManager.updateQuoteList(quoteList: quoteList)
             appState.quoteManager.setupTimer()
         }
     }

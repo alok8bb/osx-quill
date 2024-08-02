@@ -36,4 +36,8 @@ class SettingsManager: ObservableObject {
     func updateFrequency(frequency: Frequency) {
         self.frequency = frequency
     }
+    
+    func updateQuoteList(quoteList: QuoteList) {
+        self.quoteList = quoteList
+    }
 }
