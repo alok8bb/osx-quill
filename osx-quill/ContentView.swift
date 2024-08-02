@@ -7,22 +7,25 @@
 
 import SwiftUI
 
-struct ContentView: View {
-    @EnvironmentObject var quoteManager: QuoteManager
-
-    var body: some View {
-        VStack {
-            Image(systemName: "quote.opening")
-                .resizable()
-                .frame(width: 45.0, height: 32.0)
-                .foregroundStyle(.tint)
-            Text(quoteManager.currentQuote.text).font(.title)
-            Text("- \(quoteManager.currentQuote.author)")
-        }
-        .padding()
-    }
+enum Tab {
+    case Home
+    case Settings
 }
 
-#Preview {
-    ContentView()
+struct ContentView: View {
+    @Binding var selectedTab: Tab
+    
+    @EnvironmentObject var appState: AppState
+
+    var body: some View {
+        TabView (selection: $selectedTab) {
+            HomeView().tabItem {
+                Label("Home", systemImage: "house")
+            }.tag(Tab.Home)
+            SettingsView().tabItem {
+                Label("Settings", systemImage: "gear")
+            }.tag(Tab.Settings)
+        }.environmentObject(appState)
+        .padding()
+    }
 }
