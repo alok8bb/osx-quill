@@ -10,6 +10,7 @@ import SwiftUI
 enum Tab {
     case Home
     case Settings
+    case About
 }
 
 struct ContentView: View {
@@ -25,6 +26,9 @@ struct ContentView: View {
             SettingsView().tabItem {
                 Label("Settings", systemImage: "gear")
             }.tag(Tab.Settings)
+            AboutView().tabItem{
+                Label("About", systemImage: "info.circle")
+            }.tag(Tab.About)
         }.environmentObject(appState)
         .padding()
     }
