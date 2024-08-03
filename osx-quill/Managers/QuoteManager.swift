@@ -26,6 +26,7 @@ class QuoteManager: ObservableObject {
     private var motivationQuotes: [Quote] = []
     private var japaneseQuotes: [Quote] = []
     private var codingQuotes: [Quote] = []
+    private var customQuotes: [Quote] = []
     
     @Published var currentQuote: Quote = Quote(
         text: "", author: ""
@@ -36,6 +37,11 @@ class QuoteManager: ObservableObject {
         if let newQuote = motivationQuotes.randomElement(){
             currentQuote = newQuote
         }
+    }
+    
+    func setCustomQuotes(quotesTxt: String){
+        let lines = quotesTxt.components(separatedBy: .newlines)
+        self.customQuotes = lines.filter { !$0.isEmpty }.map { Quote(text: $0, author: "Unknown")}
     }
     
     func setupTimer() {
@@ -65,8 +71,8 @@ class QuoteManager: ObservableObject {
                     return self.codingQuotes
                 case QuoteList.Motivation:
                     return self.motivationQuotes
-                default:
-                    return []
+                case QuoteList.Custom:
+                    return self.customQuotes
                 }
             }()
         
