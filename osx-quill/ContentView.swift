@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 enum Tab {
     case Home
@@ -15,8 +16,6 @@ enum Tab {
 
 struct ContentView: View {
     @Binding var selectedTab: Tab
-    
-    @EnvironmentObject var appState: AppState
 
     var body: some View {
         TabView (selection: $selectedTab) {
@@ -29,7 +28,7 @@ struct ContentView: View {
             AboutView().tabItem{
                 Label("About", systemImage: "info.circle")
             }.tag(Tab.About)
-        }.environmentObject(appState)
+        }
         .padding()
     }
 }

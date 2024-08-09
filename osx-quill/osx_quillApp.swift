@@ -9,15 +9,15 @@ import SwiftUI
 
 @main
 struct osx_quillApp: App {
-    @StateObject private var appState = AppState()
     @State private var selectedTab: Tab = .Home
-    
+    @StateObject var appState = AppState()
+
     var body: some Scene {
         WindowGroup {
             ContentView(selectedTab: $selectedTab).environmentObject(appState)
         }
         
-        MenuBarExtra(appState.quoteManager.currentQuote.text.lowercased()) {
+        MenuBarExtra(appState.currentQuote.text.lowercased()) {
             Button("Settings"){
                 selectedTab = .Settings
             }.keyboardShortcut(",")

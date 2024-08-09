@@ -6,52 +6,87 @@
 //
 
 import SwiftUI
+import SwiftData
+
+enum QuoteList: String, Codable {
+    case Motivational
+    case Japanese
+    case Coding
+    case Custom
+}
+
+enum Frequency: String, Codable {
+    case every10Seconds
+    case everyMinute
+    case everyHour
+    case every3Hours
+}
+
+class Settings: ObservableObject {
+    @Published var quoteList: String {
+            didSet {
+                UserDefaults.standard.set(self.quoteList, forKey: "quoteList")
+            }
+        }
+        
+        @Published var repeatFrequency: String {
+            didSet {
+                UserDefaults.standard.set(self.repeatFrequency, forKey: "repeatFrequency")
+            }
+        }
+        
+        @Published var customText: String {
+            didSet{
+                UserDefaults.standard.set(self.customText, forKey: "customText")
+            }
+        }
+        
+        init() {
+            self.quoteList = UserDefaults.standard.string(forKey: "quoteList") ?? QuoteList.Motivational.rawValue
+            self.repeatFrequency = UserDefaults.standard.string(forKey: "repeatFrequency") ?? Frequency.everyMinute.rawValue
+            self.customText = UserDefaults.standard.string(forKey: "customText") ?? ""
+        }
+}
 
 struct SettingsView: View {
-    @State private var quoteList: QuoteList = QuoteList.Motivation
-    @State private var frequency: Frequency = Frequency.every10Seconds
-    @State private var customQuoteTxt: String = ""
-    
     @FocusState private var customQuoteFocus: Bool
-    @EnvironmentObject var appState:AppState
     
+    @EnvironmentObject var appState: AppState
+    @ObservedObject var settings = Settings()
+
     var body: some View {
         VStack() {
-            Picker(selection: $frequency, label: Text("Change Frequency")) {
-                Text("Every 10 seconds").tag(Frequency.every10Seconds)
-                Text("Every minute").tag(Frequency.everyMinute)
-                Text("Every hour").tag(Frequency.everyHour)
-                Text("On Reboot").tag(Frequency.onReboot)
+            Picker(selection: $settings.repeatFrequency, label: Text("Change Frequency")) {
+                Text("Every 10 seconds").tag(Frequency.every10Seconds.rawValue)
+                Text("Every minute").tag(Frequency.everyMinute.rawValue)
+                Text("Every hour").tag(Frequency.everyHour.rawValue)
+                Text("Every 3 hours").tag(Frequency.every3Hours.rawValue)
             }
 
-            Picker(selection: $quoteList, label: Text("Quote List")) {
-                Text(QuoteList.Motivation.rawValue).tag(QuoteList.Motivation)
-                Text(QuoteList.Coding.rawValue).tag(QuoteList.Coding)
-                Text(QuoteList.Japanese.rawValue).tag(QuoteList.Japanese)
-                Text(QuoteList.Custom.rawValue).tag(QuoteList.Custom)
+            Picker(selection: $settings.quoteList, label: Text("Quote List")) {
+                Text("Motivational").tag(QuoteList.Motivational.rawValue)
+                Text("Japanese").tag(QuoteList.Japanese.rawValue)
+                Text("Coding").tag(QuoteList.Coding.rawValue)
+                Text("Custom").tag(QuoteList.Custom.rawValue)
             }
             
-            if (quoteList == QuoteList.Custom) {
+            if (settings.quoteList == QuoteList.Custom.rawValue) {
                 Text("Use custom text/quote (for multiple quotes, separate quotes with newlines)")
-                TextField("Quotes", text: $customQuoteTxt, axis: .vertical).focused($customQuoteFocus).lineLimit(1...30).onSubmit {
-                    customQuoteTxt += "\n"
+                TextField("Quotes", text: $settings.customText, axis: .vertical).focused($customQuoteFocus).lineLimit(1...30).onSubmit {
+                    settings.customText += "\n"
                 }
                 Button(action: {
                     customQuoteFocus = false
-                    appState.quoteManager.setCustomQuotes(quotesTxt: customQuoteTxt)
-                    appState.settingsManager.updateQuoteList(quoteList: quoteList)
-                    appState.quoteManager.setupTimer()
+                    appState.setupTimer(settings: settings)
                 }) {
                     Text("Save")
                 }
             }
-        }.padding().frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top).onChange(of: frequency) {
-            appState.settingsManager.updateFrequency(frequency: frequency)
-            appState.quoteManager.setupTimer()
-        }.onChange(of: quoteList){
-            if (quoteList != QuoteList.Custom) {
-                appState.settingsManager.updateQuoteList(quoteList: quoteList)
-                appState.quoteManager.setupTimer()
+        }.padding().frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top).onChange(of: settings.repeatFrequency) {
+            appState.setupTimer(settings: settings)
+        }.onChange(of: settings.quoteList){
+            if (settings.quoteList != QuoteList.Custom.rawValue) {
+                appState.setupTimer(settings: settings)
             }
         }
     }

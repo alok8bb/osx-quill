@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct HomeView: View {
-    @EnvironmentObject var appState:AppState
+    @EnvironmentObject var appState: AppState
 
     var body: some View {
         VStack {
@@ -16,8 +16,8 @@ struct HomeView: View {
                 .resizable()
                 .frame(width: 45.0, height: 32.0)
                 .foregroundStyle(.tint)
-            Text(appState.quoteManager.currentQuote.text).font(.title)
-            Text("- \(appState.quoteManager.currentQuote.author)")
+            Text(appState.currentQuote.text).font(.title)
+            Text("- \(appState.currentQuote.author)")
         }
     }
 }
