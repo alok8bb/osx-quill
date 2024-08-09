@@ -6,11 +6,17 @@
 	objectVersion = 70;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		5C39B45F2C66456900871390 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 5C39B45E2C66456500871390 /* README.md */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
+		5C39B45E2C66456500871390 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		5C6F8E222C5C8CC400028960 /* osx-quill.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "osx-quill.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		5C39B4602C6646C500871390 /* Screenshots */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Screenshots; sourceTree = "<group>"; };
 		5C6F8E242C5C8CC400028960 /* osx-quill */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "osx-quill"; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
@@ -28,6 +34,8 @@
 		5C6F8E192C5C8CC400028960 = {
 			isa = PBXGroup;
 			children = (
+				5C39B4602C6646C500871390 /* Screenshots */,
+				5C39B45E2C66456500871390 /* README.md */,
 				5C6F8E242C5C8CC400028960 /* osx-quill */,
 				5C6F8E232C5C8CC400028960 /* Products */,
 			);
@@ -104,6 +112,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5C39B45F2C66456900871390 /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
